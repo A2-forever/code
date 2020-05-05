@@ -1,0 +1,33 @@
+Molecular Energy Level and Orbital: 
+Energy: ¦Á+2.0000¦Â £º0.4082¦Õ1    +0.4082¦Õ2    +0.4082¦Õ3    +0.4082¦Õ4    +0.4082¦Õ5    +0.4082¦Õ6    
+Energy: ¦Á+1.0000¦Â £º0.5774¦Õ1    +0.2887¦Õ2    -0.2887¦Õ3    -0.5774¦Õ4    -0.2887¦Õ5    +0.2887¦Õ6    
+Energy: ¦Á+1.0000¦Â £º0.0000¦Õ1    -0.5000¦Õ2    -0.5000¦Õ3    0.0000¦Õ4    +0.5000¦Õ5    +0.5000¦Õ6    
+Energy: ¦Á-1.0000¦Â £º0.0000¦Õ1    +0.5000¦Õ2    -0.5000¦Õ3    0.0000¦Õ4    +0.5000¦Õ5    -0.5000¦Õ6    
+Energy: ¦Á-1.0000¦Â £º0.5774¦Õ1    -0.2887¦Õ2    -0.2887¦Õ3    +0.5774¦Õ4    -0.2887¦Õ5    -0.2887¦Õ6    
+Energy: ¦Á-2.0000¦Â £º0.4082¦Õ1    -0.4082¦Õ2    +0.4082¦Õ3    -0.4082¦Õ4    +0.4082¦Õ5    -0.4082¦Õ6    
+
+Charge Density: 
+Carbon1: 1.0000
+Carbon2: 1.0000
+Carbon3: 1.0000
+Carbon4: 1.0000
+Carbon5: 1.0000
+Carbon6: 1.0000
+
+Bond Level: 
+Carbon1 and Carbon 2 is: 0.6667    Carbon1 and Carbon 6 is: 0.6667    
+Carbon2 and Carbon 3 is: 0.6667    
+Carbon3 and Carbon 4 is: 0.6667    
+Carbon4 and Carbon 5 is: 0.6667    
+Carbon5 and Carbon 6 is: 0.6667    
+
+
+Free Valence: 
+Carbon1: 0.3987
+Carbon2: 0.3987
+Carbon3: 0.3987
+Carbon4: 0.3987
+Carbon5: 0.3987
+Carbon6: 0.3987
+
+cost 0.984375s

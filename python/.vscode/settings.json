@@ -1,0 +1,33 @@
+{
+    "python.pythonPath": "D:\\Anaconda3\\python.exe",
+    "cSpell.words": [
+        "arange",
+        "eigh",
+        "fock",
+        "function",
+        "g",
+        "hf",
+        "i",
+        "ijkl",
+        "numpy",
+        "pyplot"
+    ],
+    "python.formatting.provider": "yapf",
+    //"python.linting.flake8Enabled": true,
+    "cSpell.ignoreWords": [
+        "",
+        "fock",
+        "g"
+    ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./test",
+        "-p",
+        "*_test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.promptToConfigure": false
+}
