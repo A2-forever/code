@@ -1,0 +1,18 @@
+*.exe
+*.input
+*.output
+*.in
+*.out
+*.pyc
+*.npz
+*.xls
+*.db
+*.idb
+*.pdb
+FCIDUMP
+C++ for VS
+python\test
+C++ for VSCode\test
+test.cpp
+test.py
+
