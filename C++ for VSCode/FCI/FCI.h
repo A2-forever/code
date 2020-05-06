@@ -3,13 +3,15 @@
 
 #include <cmath>
 #include <vector>
+#include <string>
 #include "Array.cpp"
 
 class Slater_det{
     //判断分子轨道i与分子轨道j之间alpha或beta电子的差别,index存放位置，N表示alpha和beta电子的数目
     friend bool find(Slater_det &k1, Slater_det &k2, int *Num, int ***index);
+    friend std::ostream &operator<<(std::ostream &os, const Slater_det &k);
 
-    private:
+private:
     int nOrb=0;                             //分子轨道数
     int nelec=0;                            //占据电子数
     int **Orbital=NULL;                     //1表示alpha轨道，2表示beta轨道,此数组表示分子轨道的电子占据，0代表空，1代表占据电子

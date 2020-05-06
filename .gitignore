@@ -3,12 +3,14 @@
 *.output
 *.in
 *.out
+*.log
 *.pyc
 *.npz
 *.xls
 *.db
 *.idb
 *.pdb
+file
 FCIDUMP
 C++ for VS
 python\test

@@ -8,8 +8,8 @@ bool read_int(const string &file_name,int &nelec, int &nOrb, double &h_nuc, doub
     file.open(file_name.c_str());
     string line;
 
-    if (!file.is_open()) { 
-        cout << "未成功打开文件" << endl;
+    if(!file.is_open()){
+        cout << "未成功打开积分文件" << endl;
         return 0;
     }
 
@@ -56,8 +56,6 @@ bool read_line_int(const string &line, double &h_nuc, double **h, double ****g)/
     string delim=" ";
     vector<string> v = split(line, delim);
 
-    if(v.size()==0)
-        return 0;//表示读取结束，读到空行
 
     double INT=string2int(v[0]);
 
@@ -69,6 +67,7 @@ bool read_line_int(const string &line, double &h_nuc, double **h, double ****g)/
 
     
     if(k!=0){//双电子积分
+        //cout << index[0] << " " << index[1] << " " << index[2] << " " << index[3] << " " << g[index[0] - 1][index[1] - 1][index[2] - 1][index[3] - 1] << endl;
         g[i-1][j-1][k-1][l-1]=INT;              //ijkl
         g[j-1][i-1][k-1][l-1]=INT;              //jikl
         g[i-1][j-1][l-1][k-1]=INT;              //ijlk
@@ -80,24 +79,17 @@ bool read_line_int(const string &line, double &h_nuc, double **h, double ****g)/
         g[l-1][k-1][j-1][i-1]=INT;              //lkji
     }
     else if (i != 0){//单电子积分
-        int i = index[0];
-        int j = index[1];
+        //cout << index[0] << " " << index[1] << " " << h[index[0] - 1][index[1] - 1] << endl;
         h[i - 1][j - 1] = INT;
         h[j - 1][i - 1] = INT;
     }
-    else//核积分项
+    else{//核积分项
+        //cout << h_nuc << endl;
         h_nuc = INT;
+        return 0;//表示读取结束，读到文件末尾
+    }
 
-    /*
-    if(k!=0)
-        cout << index[0] << " " << index[1] << " " << index[2] << " " << index[3] << " " << g[index[0] - 1][index[1] - 1][index[2] - 1][index[3] - 1] << endl;
-    else if(i!=0)
-        cout << index[0] << " " << index[1] << " " << h[index[0] - 1][index[1] - 1] << endl;
-    else
-        cout << h_nuc << endl;
-    */
-
-    return 1;//表示读取正常
+    return 1;//表示读取正常，读取仍未结束
 }
 
 double string2int(const string &s)//将字符串读成数字，形式x.xxxxxExxx

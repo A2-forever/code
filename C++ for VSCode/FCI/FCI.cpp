@@ -82,6 +82,27 @@ bool find(Slater_det &k1, Slater_det &k2, int *Num, int ***index)
     return flag;
 }
 
+//输出Slater_det类的轨道占据情况
+std::ostream &operator<<(std::ostream &os, const Slater_det &k)
+{
+    string E_sigma[2];
+    E_sigma[0]="alpha: ";
+    E_sigma[1]="beta:  ";
+    os << endl;
+    os << "电子数：" << k.nelec << endl;
+    os << "活性轨道数：" << k.nOrb << endl;
+    for (int sigma = 0; sigma < k.nOrb; sigma++){
+        os << E_sigma[sigma];
+        for (int i = 0; i < k.nOrb; i++){
+            os << k.Orbital[i][sigma] << " ";
+        }
+        os << endl;
+    }
+
+    return os;
+}
+
+
 
 CI::CI()                                                 //默认构造函数
 {
@@ -242,6 +263,7 @@ int sgn(const int n)//奇数返回-1，偶数返回1
 }
 
 //ex表示现存的轨道或电子数，未加ex表示实际的总电子数
+//Orbital_ex用于表示暂时表示组态的数组
 //CI_Array用于存储组态
 bool CI_new(const int nelec, const int nOrb, const int nelec_ex, const int nOrb_ex, int **Orbital_ex, std::vector<Slater_det> &CI_Array)
 { 
