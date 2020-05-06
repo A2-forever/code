@@ -6,7 +6,7 @@ using namespace std;
 
 int main() 
 {
-	string inputfile_name = "input\\input.txt";
+	string inputfile_name = "input\\FCI.input";
 	ifstream file;
 	string file_name;
 
