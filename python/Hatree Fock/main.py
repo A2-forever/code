@@ -8,7 +8,7 @@ from FUNCTION_HF1 import *
 eps = 1e-6
 t1 = process_time()
 
-with open("Input\input.json","r") as f:
+with open("data\\input.json","r") as f:
     line=f.readlines()
 file=line[0].split(".")
 file_name=file[0]+"."+file[1]
@@ -54,7 +54,7 @@ while(Var>=eps):                                        #误差在接受范围�
 
 
 t2 = process_time()
-with open("input\\output "+file[0]+".json ", 'w') as f:
+with open("data\\output "+file[0]+".json ", 'w') as f:
     f.write(file[0]+"\n")                               #体系名称
     f.write(str(n)+" basis functions \t")               #基函数数目
     f.write(str(n_alpha)+" alpha electrons \t")         #alpha电子数目

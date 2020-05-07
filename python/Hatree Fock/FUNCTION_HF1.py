@@ -6,7 +6,7 @@ eps = 1e-6
 
 def Get_n(file_name):                                           #获取基函数数，alpha与beta电子数
     flag=0
-    with open("Input\\"+file_name, 'r') as f:
+    with open("data\\"+file_name, 'r') as f:
         for line in f:
             temp=line.split()
             l=len(temp)
@@ -41,7 +41,7 @@ def Get_INT(file_name,n):                                       #获取重叠积
 
 
 
-    with open("Input\\"+file_name, 'r') as f:
+    with open("data\\"+file_name, 'r') as f:
         for  line in  f:
             if(line==" *** Overlap *** \n" ):
                 count_processing=1

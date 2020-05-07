@@ -10,11 +10,15 @@
 *.db
 *.idb
 *.pdb
+*.FCIDUMP
+__pycache__
 file
 FCIDUMP
 C++ for VS
 python\test
 C++ for VSCode\test
+test
 test.cpp
 test.py
+data
 

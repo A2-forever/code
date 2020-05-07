@@ -7,12 +7,12 @@ using namespace std;
 int main() 
 {
 	//输入文件，文件内为几份文件FCIDUMP的名称，方便随时更换文件
-	string inputfile = "file\\FCI.input";
+	string inputfile = "data\\FCI.input";
 	ifstream infile;
 	ofstream logfile;
 	string file_name;
 
-	logfile.open("file\\FCI.log");
+	logfile.open("data\\FCI.log");
 	infile.open(inputfile.c_str());
 	
 	if(infile.is_open())
@@ -23,14 +23,32 @@ int main()
 	}
 	getline(infile, file_name);
 	infile.close();
-	file_name = "file\\" + file_name;
+	file_name = "data\\" + file_name+"\\FCIDUMP";
 
 	
-	double **h = NULL;
-	double ****g = NULL;
 	double h_nuc = 0;
 	int nelec = 0;
 	int nOrb = 0;
+
+    ifstream file;
+    file.open(file_name.c_str());
+    string line;
+
+    //第一行格式如右，用于读取轨道个数与电子个数:"&FCI NORB=114,NELEC=42,MS2=0,"
+    getline(file, line);
+    string delim = "=";
+    vector<string> v = split(line, delim);
+
+    delim = ",";
+    vector<string> v1 = split(v[1], delim);
+    vector<string> v2 = split(v[2], delim);
+    nelec = atof(v2[0].c_str());
+    nOrb = atof(v1[0].c_str());
+
+	double **h = double2_new(nOrb, nOrb);
+	double ****g = double4_new(nOrb, nOrb, nOrb, nOrb);
+
+	
 	
 	//读取积分文件中的积分值
  	bool flag=read_int(file_name, nelec, nOrb, h_nuc, h, g);
@@ -46,6 +64,12 @@ int main()
 		 << "活性轨道数: " << nOrb << endl;
 	cout << "电子数: " << nelec << endl
 		 << "活性轨道数: " << nOrb << endl;
+
+
+	logfile << "单电子积分";
+	output(logfile, h, nOrb);
+	logfile << "双电子积分";
+	output(logfile, g, nOrb);
 
 
 	//创建FCI类，存储分子轨道积分
@@ -87,7 +111,14 @@ int main()
 	//对角化Hamilton矩阵
 	double **dbVectors=double2_new(nCI, nCI);
 	double dbEigenvalues[nCI]={0};
-	eigenh(H, dbVectors, dbEigenvalues, nCI, nJt);
+	flag=eigenh(H, dbVectors, dbEigenvalues, nCI, nJt);
+	if(flag){
+		logfile << "Hamilton矩阵对角化成功" << endl;
+	}
+	else{
+		logfile << "Hamilton矩阵对角化失败" << endl;
+		return 0;
+	}
 
 	double2_delete(h, nOrb);
 	double2_delete(H, nOrb);
@@ -118,6 +149,7 @@ int main()
 	}
 
 	outfile.close();
+	logfile.close();
 	double2_delete(dbVectors, nCI);
 
 	
