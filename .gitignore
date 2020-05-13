@@ -4,6 +4,8 @@
 *.in
 *.out
 *.log
+*.pdf
+*.gz
 *.pyc
 *.npz
 *.xls
@@ -15,6 +17,8 @@ __pycache__
 file
 FCIDUMP
 C++ for VS
+latex
+Matlab\phychem_experiment
 python\test
 C++ for VSCode\test
 test

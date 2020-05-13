@@ -2,6 +2,7 @@
 #include "File_string.cpp"
 #include "Eigen.cpp"
 #include "FCI.cpp"
+#include <iomanip>
 using namespace std;
 
 int main() 
@@ -13,12 +14,16 @@ int main()
 	string file_name;
 
 	logfile.open("data\\FCI.log");
+	logfile.setf(ios::showpoint); //设置为始终输出小数点后的数字，就是说 a = 3，它也输出 3.00000 这样
+	logfile.precision(6);
+	logfile.setf(ios::fixed); //设置为小数位始终有 6 位，没有这个的话就会像上面那个代码那样固定的不是小数点后面的数字了。
+
 	infile.open(inputfile.c_str());
 	
 	if(infile.is_open())
-        logfile << "成功打开输入文件" << endl;
+        logfile << "Successfully open the input file" << endl;
 	else{
-        logfile << "未成功打开输入文件" << endl;
+        logfile << "fail to open the input file" << endl;
 		return 0;
 	}
 	getline(infile, file_name);
@@ -26,16 +31,16 @@ int main()
 	file_name = "data\\" + file_name+"\\FCIDUMP";
 
 	
-	double h_nuc = 0;
 	int nelec = 0;
 	int nOrb = 0;
-
+	//读取文件中的轨道数与电子数，由于无法解决的bug：空指针作为参数输入函数后，得到的还是空指针，故采用此法
     ifstream file;
     file.open(file_name.c_str());
     string line;
 
     //第一行格式如右，用于读取轨道个数与电子个数:"&FCI NORB=114,NELEC=42,MS2=0,"
     getline(file, line);
+	file.close();
     string delim = "=";
     vector<string> v = split(line, delim);
 
@@ -45,31 +50,33 @@ int main()
     nelec = atof(v2[0].c_str());
     nOrb = atof(v1[0].c_str());
 
+	double h_nuc = 0;
 	double **h = double2_new(nOrb, nOrb);
 	double ****g = double4_new(nOrb, nOrb, nOrb, nOrb);
 
 	
-	
+
+
 	//读取积分文件中的积分值
  	bool flag=read_int(file_name, nelec, nOrb, h_nuc, h, g);
 
  	if(flag){
-		logfile << "积分文件读取成功" << endl;
+		logfile << "successfully read the intergal file" << endl;
 	}
 	else{
-		logfile << "积分文件读取失败" << endl;
+		logfile << "fail to read the intergal file" << endl;
 		return 0;
 	}
-	logfile << "电子数: " << nelec << endl
-		 << "活性轨道数: " << nOrb << endl;
-	cout << "电子数: " << nelec << endl
-		 << "活性轨道数: " << nOrb << endl;
+	logfile << "the number of electron: " << nelec << endl
+		 << "the number of active orbital: " << nOrb << endl;
+	cout << "the number of electron: " << nelec << endl
+		 << "the number of active orbital: " << nOrb << endl;
 
-
-	logfile << "单电子积分";
+	logfile << "one electron intergal";
 	output(logfile, h, nOrb);
-	logfile << "双电子积分";
+	logfile << "two electrons intergal";
 	output(logfile, g, nOrb);
+
 
 
 	//创建FCI类，存储分子轨道积分
@@ -80,43 +87,45 @@ int main()
 	flag = CI_new(nelec, nOrb, nelec, 2*nOrb, Orbital, CI_Array);
 
  	if(flag){
-		logfile << "组态构建成功" << endl;
+		logfile << "successfully build CIs" << endl;
 	}
 	else{
-		logfile << "组态构建失败" << endl;
+		logfile << "fail to build  CIs" << endl;
 		return 0;
 	}
 	int nCI=CI_Array.size();
-	logfile << "组态个数：" << nCI << endl;
-	cout << "组态个数：" << nCI << endl;
+	logfile << "the number of CI: " << nCI << endl;
+	cout << "the number of CI: " << nCI << endl;
 
 	for (int i = 0; i < nCI;i++)
 		logfile << CI_Array[i];
 
-
 	//构建Hamilton矩阵
-	int nJt = 30;
+	double temp = 0;
 	double **H = double2_new(nCI, nCI);
 	for (int i = 0; i < nCI; i++){
 		H[i][i] = FCI.H_ij(CI_Array[i], CI_Array[i])+h_nuc;
 		for (int j = i+1; j < nCI; j++){
-			H[i][j] = FCI.H_ij(CI_Array[i], CI_Array[j]);
-			H[j][i] = FCI.H_ij(CI_Array[i], CI_Array[j]);
+			temp = FCI.H_ij(CI_Array[i], CI_Array[j]);
+			H[i][j] = temp;
+			H[j][i] = temp;
 		}
 	}
 	CI_Array.clear();
+	logfile << "Hamilton matrix";
+	output(logfile, H, nCI);
 	
 	
-
 	//对角化Hamilton矩阵
-	double **dbVectors=double2_new(nCI, nCI);
+	int nJt = 300;
+	double **dbVectors=ones(nCI); 
 	double dbEigenvalues[nCI]={0};
 	flag=eigenh(H, dbVectors, dbEigenvalues, nCI, nJt);
 	if(flag){
-		logfile << "Hamilton矩阵对角化成功" << endl;
+		logfile << "Successfully diagonalize the Hamilton matrix" << endl;
 	}
 	else{
-		logfile << "Hamilton矩阵对角化失败" << endl;
+		logfile << "fail to diagonalize the Hamilton matrix" << endl;
 		return 0;
 	}
 
@@ -126,31 +135,28 @@ int main()
 
 
 	ofstream outfile;
-	outfile.open("file\\FCI.output");
+	outfile.open("data\\FCI.output");
+	outfile.setf(ios::showpoint); //设置为始终输出小数点后的数字，就是说 a = 3，它也输出 3.00000 这样
+	outfile.precision(6);
+	outfile.setf(ios::fixed); //设置为小数位始终有 6 位，没有这个的话就会像上面那个代码那样固定的不是小数点后面的数字了。
 
 	if(outfile.is_open())
-        logfile << "成功打开输出文件" << endl;
+        logfile << "Successfully open the output file" << endl;
 	else{
-        logfile << "未成功打开输出文件" << endl;
+        logfile << "fail to open the output file" << endl;
 		return 0;
 	}
 	
-	outfile << "本征能量：" << endl;
-	for (int i = 0; i < nCI; i++){
-		outfile << dbVectors[i] << "\t";
-	}
-	
-	outfile << "特征向量：" << endl;
-	for (int i = 0; i < nCI; i++){
-		for (int j = 0; j < nCI; j++){
-			outfile << dbVectors[i][j] << "\t";
-		}
-		outfile << endl;
-	}
+	outfile << "Eigenvalues:";
+	output(outfile, dbEigenvalues, nCI);
+
+	outfile << endl
+			<< "Eigenvectors: ";
+	output(outfile, dbVectors, nCI);
+	outfile << endl;
 
 	outfile.close();
 	logfile.close();
 	double2_delete(dbVectors, nCI);
 
-	
 }

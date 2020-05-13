@@ -68,7 +68,7 @@ bool find(Slater_det &k1, Slater_det &k2, int *Num, int ***index)
                     count1++;
                 }
                 else{                               //k2该位置占据电子，k1未占据
-                    index[1][count2++][sigma]=i;
+                    index[1][count2][sigma]=i;
                     count2++;
                 }
                 
@@ -89,9 +89,9 @@ std::ostream &operator<<(std::ostream &os, const Slater_det &k)
     E_sigma[0]="alpha: ";
     E_sigma[1]="beta:  ";
     os << endl;
-    os << "电子数：" << k.nelec << endl;
-    os << "活性轨道数：" << k.nOrb << endl;
-    for (int sigma = 0; sigma < k.nOrb; sigma++){
+    os << "nelec: " << k.nelec << endl;
+    os << "nOrb:  " << k.nOrb << endl;
+    for (int sigma = 0; sigma < 2; sigma++){
         os << E_sigma[sigma];
         for (int i = 0; i < k.nOrb; i++){
             os << k.Orbital[i][sigma] << " ";
@@ -120,19 +120,38 @@ CI::~CI()                                                   //默认析构函数
 {
 }
 
+double CI::get(int i = -1, int j = -1, int k = -1, int l = -1)
+{
+    if(k!=-1)
+        return g[i][j][k][l];
+    else if (i != -1){
+        return h[i][j];
+    }
+    else{
+        return h_nuc;
+    }
+}
 
 //计算分子轨道i与分子轨道j关于hamilton算符的耦合项
 double CI::H_ij(Slater_det &k1, Slater_det &k2)
 {
-    int *Num=new int[2];
-    int ***index=int3_new(2,nOrb,2);
-    find(k1,k2,Num,index);
+    int *Num = new int[2];
+    int ***index = int3_new(2, nOrb, 2);
+    bool flag = 1;
+    flag = find(k1, k2, Num, index);
+    if(!flag){
+        delete[] Num;
+        int3_delete(index, 2, nOrb);
+        return 0;
+    }
 
     double f_ij_alpha=this->F_ij(k1,k2,0,Num,index);          //单电子耦合项的alpha部分
     double f_ij_beta=this->F_ij(k1,k2,1,Num,index);           //单电子耦合项的beta部分
 
     double g_ij=this->G_ij(k1,k2,Num,index);                  //双电子耦合项
 
+    delete[] Num;
+    int3_delete(index, 2, nOrb);  
     return f_ij_alpha+f_ij_beta+g_ij;
 
 }
@@ -220,7 +239,7 @@ double CI::G2_ij(Slater_det &k1, Slater_det &k2, int *Num, int ***index)//计算
                 sum_int+=k1.Orb(P,0)*k1.Orb(R,1)*g[P][P][R][R];
         
     }
-    else if(Num[0]==1&&Num[1]==0){                      //k1与k2的alpha自旋轨道相差一个电子,beta自旋轨道相同
+    else if(Num[0]==1&&Num[1]==0){                   //k1与k2的alpha自旋轨道相差一个电子,beta自旋轨道相同
         int I=index[1][0][0];                        //k2的I分子轨道的sigma自旋轨道，位置占据电子，k1未占据
         int J=index[0][0][0];                        //k1的J分子轨道的sigma自旋轨道，位置占据电子，k2未占据
 
@@ -229,7 +248,7 @@ double CI::G2_ij(Slater_det &k1, Slater_det &k2, int *Num, int ***index)//计算
 
         sum_int=k2.gamma(I,0)*k1.gamma(J,0)*sum_int;
     }
-    else if(Num[0]==0&&Num[1]==1){                      //k1与k2的beta自旋轨道相差一个电子,alpha自旋轨道相同
+    else if(Num[0]==0&&Num[1]==1){                   //k1与k2的beta自旋轨道相差一个电子,alpha自旋轨道相同
         int I=index[1][0][1];                        //k2的I分子轨道的sigma自旋轨道，位置占据电子，k1未占据
         int J=index[0][0][1];                        //k1的J分子轨道的sigma自旋轨道，位置占据电子，k2未占据
 
@@ -238,7 +257,7 @@ double CI::G2_ij(Slater_det &k1, Slater_det &k2, int *Num, int ***index)//计算
 
         sum_int=k2.gamma(I,1)*k1.gamma(J,1)*sum_int;
     }
-    else if(Num[0]==1&&Num[1]==1){                      //k1与k2的alpha与beta自旋轨道均相差一个电子
+    else if(Num[0]==1&&Num[1]==1){                   //k1与k2的alpha与beta自旋轨道均相差一个电子
         int I_alpha=index[1][0][0];                  //k2的I分子轨道的alpha自旋轨道，位置占据电子，k1未占据
         int J_alpha=index[1][1][0];                  //k2的J分子轨道的alpha自旋轨道，位置占据电子，k2未占据
         int I_beta=index[0][0][1];                   //k1的I分子轨道的beta自旋轨道，位置占据电子，k1未占据

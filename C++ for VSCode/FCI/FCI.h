@@ -26,7 +26,6 @@ private:
     bool occ_cal();                                              //计算轨道i前的轨道的电子占据数
     int gamma(const int I,const int sigma);                      //组态，I_n位置的Gamma
 
-
 };
 
 
@@ -42,7 +41,9 @@ class CI{
     CI(double h_nuc_ex, double **h_ex, double ****g_ex, int nOrb_ex);
     ~CI();                                               //默认析构函数
     bool get_Int(double **h,double ****g);
-    
+    double get(int i, int j, int k, int l);
+
+
     //计算分子轨道i与分子轨道j关于hamilton算符的耦合项
     double H_ij(Slater_det &k1, Slater_det &k2);
 

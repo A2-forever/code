@@ -1,10 +1,92 @@
 {
+    // LaTeX
+    "latex-workshop.latex.autoBuild.run": "never",
+    "latex-workshop.message.error.show": false,
+    "latex-workshop.message.warning.show": false,
+
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOCFILE%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ]
+        }
+    ],
+    
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "xelatex",
+            "tools": [
+                "xelatex"
+            ],
+        },
+        {
+            "name": "pdflatex",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "xe->bib->xe->xe",
+            "tools": [
+                "xelatex",
+                "bibtex",
+                "xelatex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "pdf->bib->pdf->pdf",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        }
+    ],
+    "latex-workshop.view.pdf.viewer": "external",
+    
     "latex-workshop.view.pdf.external.viewer.command": "H:/Program Files (x86)/SumatraPDF/SumatraPDF.exe",
     "latex-workshop.view.pdf.external.viewer.args": [
+        "-forward-search",
+        "%TEX%",
+        "%LINE%",
+        "-reuse-instance",
+        "-inverse-search",
+        "\"D:/Program Files (x86)/Microsoft Visual Studio/Microsoft VS Code/Code.exe\" \"D:/Program Files (x86)/Microsoft Visual Studio/Microsoft VS Code/resources/app/out/cli.js\" -gr \"%f\":\"%l\"",
         "%PDF%"
     ],
-    "cSpell.ignoreWords": [
-        "a",
-        "paper"
-    ]
+    
+    "latex-workshop.view.pdf.external.synctex.command": "H:/Program Files (x86)/SumatraPDF/SumatraPDF.exe",
+    "latex-workshop.view.pdf.external.synctex.args": [
+        "-forward-search",
+        "%TEX%",
+        "%LINE%",
+        "-reuse-instance",
+        "-inverse-search",
+        "code \"D:/Program Files (x86)/Microsoft Visual Studio/Microsoft VS Code/resources/app/out/cli.js\" -gr \"%f\":\"%l\"",
+        "%PDF%",
+    ],
 }

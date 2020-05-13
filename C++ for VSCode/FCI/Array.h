@@ -24,6 +24,7 @@ void int3_delete(int ***M, const int &r1, const int &r2);//释放三维int数组
 void int4_delete(int ****M, const int &r1, const int &r2, const int &r3);//释放四维int数组
 
 void output(double **M,const int n);
+void output(std::ostream &os, double *M, int n);
 void output(std::ostream &os, double **M, int row, int column);
 void output(std::ostream &os, double ****M, int r1, int r2, int r3, int r4);
 
