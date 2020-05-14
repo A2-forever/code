@@ -8,7 +8,7 @@
 
 class Slater_det{
     //判断分子轨道i与分子轨道j之间alpha或beta电子的差别,index存放位置，N表示alpha和beta电子的数目
-    friend bool find(Slater_det &k1, Slater_det &k2, int *Num, int ***index);
+    friend bool find(Slater_det &k1, Slater_det &k2, int Num[], int ***index);
     friend std::ostream &operator<<(std::ostream &os, const Slater_det &k);
 
 private:
@@ -49,13 +49,13 @@ class CI{
 
     //计算分子轨道i与分子轨道j关于hamilton算符的耦合项单电子部分
     //sigma表示电子自旋，0为alpha，1为beta
-    double F_ij(Slater_det &k1, Slater_det &k2, const int sigma, int *Num, int ***index);
+    double F_ij(Slater_det &k1, Slater_det &k2, const int sigma, int Num[], int ***index);
 
     //计算分子轨道i与分子轨道j关于hamilton算符的耦合项双电子部分
     //sigma表示电子自旋，0为alpha，1为beta
-    double G_ij(Slater_det &k1, Slater_det &k2, int *Num, int ***index);
-    double G1_ij(Slater_det &k1, Slater_det &k2, const int sigma, int *Num, int ***index);//计算分子轨道i与分子轨道j关于hamilton算符的耦合项
-    double G2_ij(Slater_det &k1, Slater_det &k2, int *Num, int ***index);//计算分子轨道i与分子轨道j关于hamilton算符的耦合项
+    double G_ij(Slater_det &k1, Slater_det &k2, int Num[], int ***index);
+    double G1_ij(Slater_det &k1, Slater_det &k2, const int sigma, int Num[], int ***index);//计算分子轨道i与分子轨道j关于hamilton算符的耦合项
+    double G2_ij(Slater_det &k1, Slater_det &k2, int Num[], int ***index);//计算分子轨道i与分子轨道j关于hamilton算符的耦合项
 };
 
 int sgn(const int n);

@@ -1,3 +1,6 @@
+#ifndef EIGEN_CPP_
+#define EIGEN_CPP_
+
 #include "Eigen.h"
 
 bool eigenh(double **Matrix, double **dbVectors, double dbEigenvalues[], const int ndim, const int nJt)
@@ -9,8 +12,20 @@ bool eigenh(double **Matrix, double **dbVectors, double dbEigenvalues[], const i
     int q=-1;
     bool flag=1;
 
+    
+	std::ofstream logfile;
+	logfile.open("test\\test.log");
+	logfile.setf(std::ios::showpoint); //设置为始终输出小数点后的数字，就是说 a = 3，它也输出 3.00000 这样
+	logfile.precision(6);
+	logfile.setf(std::ios::fixed); //设置为小数位始终有 6 位，没有这个的话就会像上面那个代码那样固定的不是小数点后面的数字了。
+
     while(1)
     {
+        logfile<<"Matrix is: "<<std::endl;
+        output(logfile,M,ndim);
+        logfile<<"dbVectors is: "<<std::endl;
+        output(logfile,dbVectors,ndim);
+
         max(M,ndim,p,q);//寻找到非对角线的绝对值最大的数的位置
 
         if(fabs(M[p][q])<eps){
@@ -26,13 +41,6 @@ bool eigenh(double **Matrix, double **dbVectors, double dbEigenvalues[], const i
         count++;//进行一次迭代计数
         jacobi(M,dbVectors,ndim,p,q);//进行一次jacobi迭代
         
-        /*
-        std::cout<<"Matrix is: "<<std::endl;
-        output(M,ndim);
-        std::cout<<"dbVectors is: "<<std::endl;
-        output(dbVectors,ndim);
-        */
-
     }
 
     for(int i=0;i<ndim;i++)
@@ -153,3 +161,5 @@ double **resemble(double **M, const int row, const int column)//复制二维数�
 
     return N;
 }
+
+#endif

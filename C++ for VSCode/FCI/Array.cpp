@@ -68,7 +68,7 @@ void double2_delete(double **M, const long long &row)//释放二维double数组,
 
 void double3_delete(double ***M, const int &r1, const int &r2)//释放三维double数组
 {
-    for(int i=0;i<r2;i++)
+    for(int i=0;i<r1;i++)
         double2_delete(M[i], r2);
     delete[] M;
 }
@@ -124,7 +124,7 @@ void int2_delete(int **M, const int &row)//释放二维int数组
 
 void int3_delete(int ***M, const int &r1, const int &r2)//释放三维int数组
 {
-    for(int i=0;i<r2;i++)
+    for(int i=0;i<r1;i++)
         int2_delete(M[i], r2);
     delete[] M;
 }
@@ -188,7 +188,7 @@ void output(std::ostream &os, double ****M, int r1, int r2 = 0, int r3 = 0, int 
         for(int j=0;j<r2;j++){
             for(int k=0;k<r3;k++){
                 for(int l=0;l<r4;l++)
-                    os << i + 1 << " " << j + 1 << " " << k + 1 << " " << l + 1 << "\t" << M[i][j][k][l] << std::endl;
+                    os << i + 1 << " " << j + 1 << " " << k + 1 << " " << l + 1 << "\t\t" << M[i][j][k][l] << std::endl;
             }
         }
     }

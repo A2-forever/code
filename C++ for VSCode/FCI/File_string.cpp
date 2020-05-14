@@ -1,3 +1,6 @@
+#ifndef FILE_STRING_CPP_
+#define FILE_STRING_CPP_
+
 #include "File_string.h"
 
 
@@ -153,3 +156,5 @@ vector<string> split(const string& s, const string& delim)
     
     return v;
 }
+
+#endif

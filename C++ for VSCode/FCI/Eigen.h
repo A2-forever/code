@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include "Array.cpp"
+#include "File_string.cpp"
 
 #define eps 1e-6
 

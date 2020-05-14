@@ -28,9 +28,8 @@ int main()
 	}
 	getline(infile, file_name);
 	infile.close();
-	file_name = "data\\" + file_name+"\\FCIDUMP";
+	file_name = "data\\" + file_name + "\\FCIDUMP";
 
-	
 	int nelec = 0;
 	int nOrb = 0;
 	//读取文件中的轨道数与电子数，由于无法解决的bug：空指针作为参数输入函数后，得到的还是空指针，故采用此法
@@ -53,8 +52,6 @@ int main()
 	double h_nuc = 0;
 	double **h = double2_new(nOrb, nOrb);
 	double ****g = double4_new(nOrb, nOrb, nOrb, nOrb);
-
-	
 
 
 	//读取积分文件中的积分值
@@ -111,13 +108,14 @@ int main()
 			H[j][i] = temp;
 		}
 	}
+
 	CI_Array.clear();
 	logfile << "Hamilton matrix";
 	output(logfile, H, nCI);
 	
 	
 	//对角化Hamilton矩阵
-	int nJt = 300;
+	int nJt = 3;
 	double **dbVectors=ones(nCI); 
 	double dbEigenvalues[nCI]={0};
 	flag=eigenh(H, dbVectors, dbEigenvalues, nCI, nJt);
@@ -130,7 +128,7 @@ int main()
 	}
 
 	double2_delete(h, nOrb);
-	double2_delete(H, nOrb);
+	double2_delete(H, nCI);
 	double4_delete(g, nOrb, nOrb, nOrb);
 
 
