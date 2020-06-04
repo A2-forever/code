@@ -4,7 +4,7 @@
 #include "File_string.h"
 
 
-bool read_int(const string &file_name, int &nelec, int &nOrb, double &h_nuc, double **h, double ****g)//读取文件中的积分，电子数与分子轨道数
+bool read_int(const string &file_name, int &nelec, int &nOrb, double &MS, double &h_nuc, vector<double> &h, vector<double> &g)//读取文件中的积分，电子数与分子轨道数
 {
     bool flag=0;
     std::ifstream file;
@@ -17,7 +17,7 @@ bool read_int(const string &file_name, int &nelec, int &nOrb, double &h_nuc, dou
 
     string line;
     string delim;
-    /*
+    
     //第一行格式如右，用于读取轨道个数与电子个数:"&FCI NORB=114,NELEC=42,MS2=0,"
     getline(file, line);
     delim = "=";
@@ -25,24 +25,22 @@ bool read_int(const string &file_name, int &nelec, int &nOrb, double &h_nuc, dou
 
     delim = ",";
     vector<string> v1 = split(v[1], delim);
-    vector<string> v2 = split(v[2], delim);
-    nelec = atof(v2[0].c_str());
     nOrb = atof(v1[0].c_str());
-    
+    v1 = split(v[2], delim);
+    nelec = atof(v1[0].c_str());
+    v1 = split(v[3], delim);
+    MS = atof(v1[0].c_str()) ;
+    /*
     cout << nelec << endl
          << nOrb << endl;
-    
+    */
 
-    v1.clear();
-    v2.clear();
-
-*/
     //右为读取开始的标志:" &END"
     delim = "&END";
-    /*
-	h = double2_new(nOrb, nOrb);
-	g = double4_new(nOrb, nOrb, nOrb, nOrb);
-    */
+
+    h.resize(nOrb * nOrb);
+    g.resize(nOrb * nOrb * nOrb * nOrb);
+
     while(getline(file,line)){
         if(!flag)//用于判断是否可以开始读取积分,flag=1表示可以开始读取积分
             flag = judge_start(line, delim);
@@ -58,7 +56,7 @@ bool read_int(const string &file_name, int &nelec, int &nOrb, double &h_nuc, dou
     return 1;
 }
 
-bool read_line_int(const string &line, double &h_nuc, double **h, double ****g)//读取轨道积分
+bool read_line_int(const string &line, double &h_nuc, vector<double> &h, vector<double> &g)//读取轨道积分
 {
     string delim=" ";
     vector<string> v = split(line, delim);
@@ -66,29 +64,31 @@ bool read_line_int(const string &line, double &h_nuc, double **h, double ****g)/
 
     double INT=string2int(v[0]);
 
-        
-    int i = atof(v[1].c_str());
-    int j = atof(v[2].c_str());
-    int k = atof(v[3].c_str());
-    int l = atof(v[4].c_str());
+    int i = atof(v[1].c_str()) - 1;
+    int j = atof(v[2].c_str()) - 1;
+    int k = atof(v[3].c_str()) - 1;
+    int l = atof(v[4].c_str()) - 1;
 
-    
+    int dim2 = h.size();
+    int dim = sqrt(dim2);       //数组的维度
+    int dim3 = dim * dim2;
+
     //cout << i << " " << j << " " << k << " " << l << "\t" << INT << std::endl;
-    if(k!=0){//双电子积分
-        g[i-1][j-1][k-1][l-1]=INT;              //ijkl
-        g[j-1][i-1][k-1][l-1]=INT;              //jikl
-        g[i-1][j-1][l-1][k-1]=INT;              //ijlk
-        g[j-1][i-1][l-1][k-1]=INT;              //jilk
+    if(k!=-1){//双电子积分
+        g[i * dim3 + j * dim2 + k * dim + l] = INT;              //ijkl
+        g[i * dim3 + j * dim2 + l * dim + k] = INT;              //jikl
+        g[j * dim3 + i * dim2 + k * dim + l] = INT;              //ijlk
+        g[j * dim3 + i * dim2 + l * dim + k] = INT;              //jilk
     
-        g[k-1][l-1][i-1][j-1]=INT;              //klij
-        g[k-1][l-1][j-1][i-1]=INT;              //klji
-        g[l-1][k-1][i-1][j-1]=INT;              //lkij
-        g[l-1][k-1][j-1][i-1]=INT;              //lkji
+        g[k * dim3 + l * dim2 + i * dim + j] = INT;              //klij
+        g[k * dim3 + l * dim2 + j * dim + i] = INT;              //klji
+        g[l * dim3 + k * dim2 + i * dim + j] = INT;              //lkij
+        g[l * dim3 + k * dim2 + j * dim + i] = INT;              //lkji
         //cout << i << " " << j << " " << k << " " << l << "\t" << g[i-1][j-1][k-1][l-1] << std::endl;
     }
-    else if (i != 0){//单电子积分
-        h[i - 1][j - 1] = INT;
-        h[j - 1][i - 1] = INT;
+    else if (i != -1){//单电子积分
+        h[i * dim + j] = INT;
+        h[j * dim + i] = INT;
         //cout << i << " " << j << "\t" << h[i - 1][j - 1] << std::endl;
     }
     else{//核积分项

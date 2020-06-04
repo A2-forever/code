@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstdlib>
 
+
+
 double **double2_new(const int &row, const int &column);//创建二维double数组
 double **double2_new(const long long &row, const long long &column); //创建二维double数组,long long
 double ***double3_new(const int &r1, const int &r2, const int &r3);//创建三维double数组
