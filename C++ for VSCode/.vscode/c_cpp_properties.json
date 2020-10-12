@@ -10,8 +10,17 @@
                 "D:/Code/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include",
                 "D:/Code/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/include-fixed",
                 "D:/Code/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/8.1.0/../../../../x86_64-w64-mingw32/include",
-                "D:/Code/eigen3"
+                "D:/Code/eigen3",
+                "D:/Code/Intel/IntelSWTools/compilers_and_libraries_2020.1.216/windows/mkl/include",
+                "D:/Code/Intel/IntelSWTools/compilers_and_libraries_2020.1.216/windows/compiler/lib/intel64_win"
+
             ],
+            "browse": 
+            {
+                "path": [
+                    "D:/Code/Intel/IntelSWTools/compilers_and_libraries_2020.1.216/windows/mkl/lib/intel64_win"
+                ]
+            },
             "defines": [
                 "_DEBUG",
                 "UNICODE",
