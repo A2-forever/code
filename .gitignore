@@ -15,7 +15,6 @@
 *.FCIDUMP
 __pycache__
 file
-FCIDUMP
 C++ for VS
 latex
 Matlab
@@ -25,6 +24,5 @@ doc
 test
 test.cpp
 test.py
-data
 .leetcode
 
